@@ -1,1 +1,18 @@
-Lorem ipsum dolor sit amet
+Crie um programa em linguagem C, padrão C17, que liste a quantidade de palavras em cada um dos arquivos textos recebidos como parâmetros via linha de comando. Sua solução deve usar concorrência baseada em threads.
+
+Por exemplo, se seu programa for nomeado contpal, uma possível execução seria:
+
+./contpal arquivo1.txt arquivo2.txt arquivo3.txt
+
+E a saída correspondente, hipoteticamente, poderia ser:
+
+arquivo2.txt: 450 palavras
+arquivo1.txt: 1250 palavras
+arquivo3.txt: 20 palavras
+
+Importante: 
+
+- Seu código não deve apresentar "vazamento" de memória. Checarei isso via "valgrind".
+- Considere que os arquivos txt estejam codificados em UTF-8 (veja link sobre UNICODE)
+
+Publique seu código em um repositório GIT que o professor possa acessar no momento da correção.

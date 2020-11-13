@@ -19,22 +19,40 @@
 //     }
 // }
 
-// Most throughput local: 150-160 MiB/s
+// Max throughput local: 4 GiB/s
 
-void *flush_buffer();
+void *flush();
 
 int main() {
 
-    char buffer[BUF_SIZE];
+    // Flushing thread, unlocked
+    pthread_t t1;
+    pthread_create(&t1, NULL, flush, NULL);
+
+    char *buffer = (char *) malloc(BUF_SIZE);
 
     memset(buffer, '\0', BUF_SIZE); // Set all entries of the buffer to null '\0'
 
-    // Set stdout to the buffer created. The buffer outputs automatically when full (_IOFBF MODE)
+    /* Set stdout to the buffer created. The buffer outputs automatically when full (_IOFBF MODE). However, we do not wan't that
+    to happen. A full buffer means that the writing would stop. That is why we need a large enough buffer to ensure our throughput is
+    maxxed out; id est, our flushing thread can keep up with the writing thread. */
     setvbuf(stdout, buffer, _IOFBF, BUF_SIZE);
 
+    // Writing thread (main), unlocked
     while(1) {
-        fwrite("*\n", 1, 3, stdout); // Fwrite adds buffering on top of write (syscall)  
+        fwrite_unlocked("*\n", 1, 3, stdout); // Fwrite adds buffering on top of write (syscall)  
     }
 
     return(0);
 }
+
+// Flushes the written data immediately
+void *flush() {
+
+    while(1) {
+        fflush_unlocked(stdout);
+    }
+
+    return NULL;
+}
+

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
-#define BUF_SIZE 64000
+#define BUF_SIZE 64000 // Sets the buffer size
 
 /*
 
@@ -19,7 +19,7 @@
 //     }
 // }
 
-// Most throughput local: 100-110 MiB/s
+// Most throughput local: 150-160 MiB/s
 
 void *flush_buffer();
 
@@ -29,11 +29,11 @@ int main() {
 
     memset(buffer, '\0', BUF_SIZE); // Set all entries of the buffer to null '\0'
 
-    // Set stdout to the buffer created. The buffer outputs automatically when full
+    // Set stdout to the buffer created. The buffer outputs automatically when full (_IOFBF MODE)
     setvbuf(stdout, buffer, _IOFBF, BUF_SIZE);
 
     while(1) {
-        fputs("*\n", stdout);   
+        fwrite("*\n", 1, 3, stdout); // Fwrite adds buffering on top of write (syscall)  
     }
 
     return(0);

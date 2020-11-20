@@ -1,17 +1,15 @@
 #include <stdio.h>
 #include <stddef.h>
-
-char memory[50*1024*1024]; // The memory representation as an array
-
-// Struct which defines an allocated/free memory section. Its has a 'size_t' in bytes,
-typedef struct section {
-  int isFree; // Bool for checking if the section is free
-  size_t size; // Section size in bytes
-  struct section *next; // Pointer to the next section of memory in the linked list
-} _section;
+#include "memory.h"
 
 // Point the sections linked list at the start of the memory. At the start, we have only one large section.
 _section *memorySections = (void *)memory;
+
+void startupMemory() {
+    memorySections->isFree = 1;
+    memorySections->size = sizeof(memory) - sizeof(_section); // Account for the first section allocation
+    memorySections->next = NULL;
+}
 
 void *allocate(size_t nBytes) {
     // Find the first available free section with enough space
@@ -39,22 +37,7 @@ void liberate(void *p) {
         printf("Liberated section: '%d'\n", current);
         current--; // Get to the section header
         current->isFree = 1; // Frees the section
-        return NULL;
+    } else {
+        printf("Invalid pointer\n");
     }
-    printf("Invalid pointer\n");
-    return NULL;
-}
-
-int main(void) {
-    memorySections->isFree = 1;
-    memorySections->size = sizeof(memory) - sizeof(_section); // Account for the first section allocation
-    memorySections->next = NULL;
-
-    int *p = (int *) allocate(sizeof(int));
-    *p = 100;
-    printf("Address pointed by p: '%d'\n", p);
-    printf("Content of p: '%d'\n", *p);
-
-    liberate(p);
-
 }

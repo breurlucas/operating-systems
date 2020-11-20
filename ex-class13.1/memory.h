@@ -1,9 +1,16 @@
-static memoria[50*1024*1024]
+// #include <stdio.h>
 
-void *aloca(int nbytes) {
+static memory[50*1024*1024]
 
+typedef struct section {
+  int size;
+  struct section *next;
+} _section;
+
+void *allocate(int nbytes) {
+    for ()
 }
 
-libera(void *p) {
+void liberate(void *p) {
 
 }

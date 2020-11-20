@@ -32,9 +32,18 @@ void *allocate(size_t nBytes) {
     return NULL;
 }
 
-// void liberate(void *p) {
-
-// }
+void liberate(void *p) {
+    // Check whether the given address lies whithin the memory
+    if(p >= (void *) memory && p <= (void *) (memory + sizeof(memory))) {
+        _section *current = p; // Points to the section to be freed
+        printf("Liberated section: '%d'\n", current);
+        current--; // Get to the section header
+        current->isFree = 1; // Frees the section
+        return NULL;
+    }
+    printf("Invalid pointer\n");
+    return NULL;
+}
 
 int main(void) {
     memorySections->isFree = 1;
@@ -45,4 +54,7 @@ int main(void) {
     *p = 100;
     printf("Address pointed by p: '%d'\n", p);
     printf("Content of p: '%d'\n", *p);
+
+    liberate(p);
+
 }

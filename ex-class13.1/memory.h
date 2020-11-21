@@ -7,6 +7,7 @@ typedef struct section {
   struct section *next; // Pointer to the next section of memory in the linked list
 } _section;
 
-void *allocate(size_t nbytes); 
-void liberate(void *p); 
+void *allocate(size_t); 
+void liberate(void *); 
 void startupMemory();
+void printSections();
